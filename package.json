@@ -12,6 +12,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.469.0",
     "mongoose": "^8.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,7 +27,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
-    "seed": "node server/seed/pizzas.js"
+    "seed": "node server/seed/pizzas.js",
+    "prod:build": "npm run build && NODE_ENV=production npm run seed",
+    "prod:start": "NODE_ENV=production node server/server.js"
   },
   "eslintConfig": {
     "extends": [

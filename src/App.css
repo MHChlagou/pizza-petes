@@ -27,11 +27,11 @@
 }
 
 .navbar-brand img {
-  transition: transform 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 .navbar-brand:hover img {
-  transform: rotate(10deg);
+  opacity: 0.9;
 }
 
 .order-count {
@@ -49,15 +49,22 @@
   gap: 30px;
 }
 
-.navbar-links a {
+.nav-link {
   text-decoration: none;
   color: #2d3436;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.navbar-links a:hover {
+.nav-link:hover {
   color: #d63031;
+}
+
+.nav-link span {
+  display: inline-block;
 }
 
 /* Home page styles */
@@ -66,18 +73,22 @@
 }
 
 .hero-section {
-  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../public/images/pizza-img.png');
+  /*background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../public/images/pizza-img.png');*/
   background-size: cover;
   background-position: center;
-  color: white;
+  background-attachment: fixed;
+  color: black;
   padding: 100px 20px;
   text-align: center;
   margin: -20px -20px 40px -20px;
+  will-change: transform;
 }
 
 .hero-logo {
   width: 150px;
+  height: auto;
   margin-bottom: 20px;
+  will-change: transform;
 }
 
 .hero-section h1 {
@@ -94,6 +105,7 @@
   font-size: 1.2em;
   padding: 15px 40px;
   max-width: 200px;
+  margin: 0 auto;
 }
 
 /* Featured section */
@@ -117,12 +129,11 @@
   background: white;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .featured-pizza:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .featured-pizza img {
@@ -161,13 +172,19 @@
   background: white;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   cursor: pointer;
 }
 
 .option-card:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.option-icon {
+  color: #d63031;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .option-card h3 {
@@ -201,6 +218,13 @@
   text-align: center;
 }
 
+.feature-icon {
+  color: #d63031;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 .feature h3 {
   color: #d63031;
   margin-bottom: 15px;
@@ -217,7 +241,11 @@
   border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary {
@@ -227,7 +255,6 @@
 
 .btn-primary:hover {
   background-color: #c0392b;
-  transform: translateY(-2px);
 }
 
 /* Form styles */

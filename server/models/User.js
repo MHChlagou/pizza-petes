@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  zipCode: {
+    type: String
+  },
   favoriteOrders: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order'

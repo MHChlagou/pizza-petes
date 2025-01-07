@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { 
+  Home,
+  ShoppingCart,
+  User,
+  LogOut
+} from 'lucide-react';
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -29,12 +35,23 @@ const Navbar = () => {
         PIZZA PETE'S
       </Link>
       <div className="navbar-links">
-        <Link to="/">HOME</Link>
-        <Link to="/order">
-          ORDER {orderCount > 0 && <span className="order-count">({orderCount})</span>}
+        <Link to="/" className="nav-link">
+          <Home size={18} />
+          <span>HOME</span>
         </Link>
-        <Link to="/account">ACCOUNT</Link>
-        <button onClick={handleLogout} className="nav-link">LOGOUT</button>
+        <Link to="/order" className="nav-link">
+          <ShoppingCart size={18} />
+          <span>ORDER</span>
+          {orderCount > 0 && <span className="order-count">({orderCount})</span>}
+        </Link>
+        <Link to="/account" className="nav-link">
+          <User size={18} />
+          <span>ACCOUNT</span>
+        </Link>
+        <button onClick={handleLogout} className="nav-link">
+          <LogOut size={18} />
+          <span>LOGOUT</span>
+        </button>
       </div>
     </nav>
   );

@@ -8,7 +8,7 @@ const { generateToken, protect } = require('../middleware/auth');
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { firstName, lastName, email, password, address, city, state } = req.body;
+    const { firstName, lastName, email, password, address, city, state, zipCode } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -24,7 +24,8 @@ router.post('/register', async (req, res) => {
       password,
       address,
       city,
-      state
+      state,
+      zipCode
     });
 
     if (user) {
@@ -71,7 +72,8 @@ router.post('/login', async (req, res) => {
         email: user.email,
         address: user.address,
         city: user.city,
-        state: user.state
+        state: user.state,
+        zipCode: user.zipCode
       }
     });
   } catch (error) {
@@ -80,12 +82,38 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// @route   PUT /api/auth/update
-// @desc    Update user profile
+// @route   GET /api/auth/verify
+// @desc    Verify token and get user data
 // @access  Private
+router.get('/verify', protect, async (req, res) => {
+  try {
+    // Find user by ID from auth token (already verified by protect middleware)
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        zipCode: user.zipCode
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 router.put('/update', protect, async (req, res) => {
   try {
-    const { firstName, lastName, email, address, city, state } = req.body;
+    const { firstName, lastName, email, address, city, state, zipCode } = req.body;
 
     // Find user by ID from auth token
     const user = await User.findById(req.user._id);
@@ -99,6 +127,7 @@ router.put('/update', protect, async (req, res) => {
     user.address = address;
     user.city = city;
     user.state = state;
+    user.zipCode = zipCode;
 
     await user.save();
 
@@ -110,7 +139,8 @@ router.put('/update', protect, async (req, res) => {
         email: user.email,
         address: user.address,
         city: user.city,
-        state: user.state
+        state: user.state,
+        zipCode: user.zipCode
       }
     });
   } catch (error) {

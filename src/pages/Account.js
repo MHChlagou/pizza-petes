@@ -168,6 +168,22 @@ const Account = () => {
 
           <div className="form-row">
             <div className="form-group">
+              <label htmlFor="state">State</label>
+              <select
+                id="state"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+              >
+                {states.map(state => (
+                  <option key={state.value} value={state.value}>
+                    {state.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
               <label htmlFor="city">City</label>
               <select
                 id="city"
@@ -180,22 +196,6 @@ const Account = () => {
                 {cities[formData.state]?.map(city => (
                   <option key={city} value={city}>
                     {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="state">State</label>
-              <select
-                id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
-              >
-                {states.map(state => (
-                  <option key={state.value} value={state.value}>
-                    {state.label}
                   </option>
                 ))}
               </select>
