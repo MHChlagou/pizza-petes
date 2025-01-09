@@ -16,8 +16,8 @@ A full-stack web application for ordering pizzas online, built with React and No
 ## Tech Stack
 
 ### Frontend
-- React.js
-- React Router for navigation
+- React.js 18
+- React Router v6 for navigation
 - Axios for API requests
 - Context API for state management
 - CSS for styling
@@ -27,46 +27,63 @@ A full-stack web application for ordering pizzas online, built with React and No
 - Express.js
 - MongoDB with Mongoose
 - JWT for authentication
+- Bcrypt for password hashing
 
 ## Project Structure
 
 ```
 pizza-petes/
-├── public/                 # Static files
-│   ├── images/            # Image assets
-│   └── index.html         # Main HTML file
-├── server/                # Backend code
+├── .env.development      # Development environment variables
+├── .env.production      # Production environment variables
+├── public/              # Static files
+│   ├── images/          # Image assets
+│   │   ├── pepperoni.png
+│   │   ├── supreme.png
+│   │   └── logo/
+│   │       └── pizza-logo.png
+│   ├── index.html       # Main HTML file
+│   └── manifest.json    # Web app manifest
+├── server/              # Backend code
 │   ├── config/           
-│   │   └── db.js         # Database configuration
+│   │   └── db.js       # Database configuration
 │   ├── middleware/
-│   │   └── auth.js       # Authentication middleware
-│   ├── models/           # Mongoose models
-│   │   ├── Order.js      # Order schema
-│   │   ├── Pizza.js      # Pizza schema
-│   │   └── User.js       # User schema
-│   ├── routes/           # API routes
-│   │   ├── auth.js       # Authentication routes
-│   │   ├── orders.js     # Order management routes
-│   │   └── pizzas.js     # Pizza management routes
-│   └── server.js         # Main server file
-└── src/                  # Frontend code
-    ├── components/       # Reusable components
-    │   ├── Navbar.js     # Navigation bar
+│   │   └── auth.js     # Authentication middleware
+│   ├── models/         # Mongoose models
+│   │   ├── Order.js    # Order schema
+│   │   ├── Pizza.js    # Pizza schema
+│   │   └── User.js     # User schema
+│   ├── routes/         # API routes
+│   │   ├── auth.js     # Authentication routes
+│   │   ├── orders.js   # Order management routes
+│   │   └── pizzas.js   # Pizza management routes
+│   ├── seed/
+│   │   └── pizzas.js   # Initial pizza menu data
+│   └── server.js       # Main server file
+└── src/                # Frontend code
+    ├── components/     # Reusable components
+    │   ├── home/      # Home page components
+    │   │   ├── AboutSection.js
+    │   │   ├── FeaturedSection.js
+    │   │   ├── HeroSection.js
+    │   │   └── OrderingSection.js
+    │   ├── Navbar.js   # Navigation bar
     │   └── PrivateRoute.js # Protected route wrapper
     ├── context/
     │   └── AuthContext.js # Authentication context
-    ├── data/            # Static data
-    │   ├── cities.js    # Tunisia cities data
-    │   └── states.js    # Tunisia governorates data
-    ├── pages/           # Page components
-    │   ├── Account.js   # User profile page
-    │   ├── Home.js      # Landing page
-    │   ├── Login.js     # Login page
+    ├── data/          # Static data
+    │   ├── cities.js  # Tunisia cities data
+    │   └── states.js  # Tunisia governorates data
+    ├── pages/         # Page components
+    │   ├── Account.js # User profile page
+    │   ├── Auth.css   # Authentication pages styling
+    │   ├── Home.js    # Landing page
+    │   ├── Login.js   # Login page
     │   ├── OrderPage.js # Pizza ordering page
-    │   └── Register.js  # Registration page
-    ├── App.js           # Main React component
-    └── index.js         # React entry point
-
+    │   └── Register.js # Registration page
+    ├── App.css        # Main application styles
+    ├── App.js         # Main React component
+    ├── index.css      # Global styles
+    └── index.js       # React entry point
 ```
 
 ## Key Files Description
@@ -86,6 +103,9 @@ pizza-petes/
 #### Middleware
 - `auth.js`: JWT authentication middleware for protected routes
 
+#### Seed Data
+- `pizzas.js`: Contains initial pizza menu data that can be seeded to the database
+
 ### Frontend
 
 #### Pages
@@ -93,6 +113,11 @@ pizza-petes/
 - `OrderPage.js`: Main ordering interface with pizza customization
 - `Account.js`: User profile management and order history
 - `Login.js` & `Register.js`: Authentication pages
+
+#### Components
+- `home/`: Components for the landing page sections
+- `Navbar.js`: Navigation and user menu component
+- `PrivateRoute.js`: Protected route wrapper for authenticated pages
 
 #### Context
 - `AuthContext.js`: Manages user authentication state across the application
@@ -103,35 +128,73 @@ pizza-petes/
 
 ## Setup Instructions
 
-1. Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/pizza-petes.git
+   cd pizza-petes
+   ```
+
 2. Install dependencies:
    ```bash
-   # Install backend dependencies
-   cd pizza-petes
-   npm install
-
-   # Install frontend dependencies
-   cd client
+   # Install all dependencies (both frontend and backend)
    npm install
    ```
 
-3. Create a `.env` file in the root directory with:
+3. Environment Configuration:
+
+   Create `.env.development` for development:
    ```
+   REACT_APP_API_URL=http://localhost:5000
    MONGODB_URI=your_mongodb_uri
    JWT_SECRET=your_jwt_secret
    PORT=5000
+   NODE_ENV=development
    ```
 
-4. Start the development servers:
+   Create `.env.production` for production:
+   ```
+   REACT_APP_API_URL=your_production_api_url
+   MONGODB_URI=your_production_mongodb_uri
+   JWT_SECRET=your_production_jwt_secret
+   PORT=5000
+   NODE_ENV=production
+   ```
+
+4. Seed the database with initial pizza data:
    ```bash
-   # Start backend server
-   npm run server
-
-   # Start frontend development server
-   npm run client
+   npm run seed
    ```
 
-5. Access the application at `http://localhost:3000`
+5. Start the development servers:
+   ```bash
+   # Start both frontend and backend in development mode
+   npm run dev
+   ```
+
+   The application will be available at:
+   - Frontend: `http://localhost:3000`
+   - Backend API: `http://localhost:5000`
+
+6. For production:
+   ```bash
+   # Build and seed data
+   npm run prod:build
+
+   # Start the production server
+   npm run prod:start
+   ```
+
+## Available Scripts
+
+- `npm start`: Starts the frontend development server
+- `npm run server`: Starts the backend server with nodemon for development
+- `npm run dev`: Runs both frontend and backend in development mode using concurrently
+- `npm run build`: Builds the frontend for production
+- `npm run seed`: Seeds the database with initial pizza data
+- `npm run prod:build`: Builds frontend and seeds data for production
+- `npm run prod:start`: Starts the production server
+- `npm test`: Runs the test suite
+- `npm run eject`: Ejects from create-react-app (don't use unless necessary)
 
 ## Features in Detail
 
