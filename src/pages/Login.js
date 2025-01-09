@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,12 +33,15 @@ const Login = () => {
   };
 
   return (
-    <div className="form-container">
-      <h1>PIZZA PETE'S</h1>
-      <h2>Welcome Back!</h2>
-      {error && <div className="error-message">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>PIZZA PETE'S</h1>
+          <h2>Welcome Back!</h2>
+        </div>
+        {error && <div className="error-message">{error}</div>}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
           <input
             type="email"
             name="email"
@@ -57,9 +61,10 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Log In</button>
-      </form>
-      <Link to="/register" className="auth-link">Don't Have an Account? Register</Link>
+          <button type="submit" className="auth-button">Log In</button>
+        </form>
+        <Link to="/register" className="auth-link">Don't Have an Account? Register</Link>
+      </div>
     </div>
   );
 };

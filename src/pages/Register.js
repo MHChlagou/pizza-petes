@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { states } from '../data/states';
 import { cities } from '../data/cities';
+import './Auth.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -47,13 +48,16 @@ const Register = () => {
   };
 
   return (
-    <div className="form-container">
-      <h1>Create Your Account</h1>
-      <p>Join Pizza Pete's for the best pizza experience!</p>
-      
-      {error && <div className="error-message">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>Create Your Account</h1>
+          <p>Join Pizza Pete's for the best pizza experience!</p>
+        </div>
+        
+        {error && <div className="error-message">{error}</div>}
+        
+        <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="firstName">First Name</label>
@@ -176,12 +180,13 @@ const Register = () => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Create Account</button>
-      </form>
+          <button type="submit" className="auth-button">Create Account</button>
+        </form>
 
-      <Link to="/login" className="auth-link">
-        Already have an account? Log in
-      </Link>
+        <Link to="/login" className="auth-link">
+          Already have an account? Log in
+        </Link>
+      </div>
     </div>
   );
 };
