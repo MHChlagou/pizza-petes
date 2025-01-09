@@ -35,10 +35,11 @@ const userSchema = new mongoose.Schema({
   zipCode: {
     type: String
   },
-  favoriteOrders: [{
+  favoriteOrder: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Order'
-  }]
+    ref: 'Order',
+    default: null
+  }
 }, {
   timestamps: true
 });

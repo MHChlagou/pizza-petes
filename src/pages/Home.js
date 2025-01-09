@@ -46,59 +46,77 @@ const Home = () => {
     loadPizzas();
   }, []);
 
-  // Load favorites only if user is authenticated
+  // Load favorite order if user is authenticated
   useEffect(() => {
-    const loadFavorites = async () => {
+    const loadFavorite = async () => {
       if (user) {
         setIsLoading(true);
         try {
-          const response = await axios.get('http://localhost:5000/api/orders/favorites', {
+          const response = await axios.get('http://localhost:5000/api/orders/favorite', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
           });
-          setFavorites(response.data);
+          setFavorites(response.data ? [response.data] : []);
         } catch (err) {
-          console.error('Failed to fetch favorites:', err);
+          console.error('Failed to fetch favorite order:', err);
         } finally {
           setIsLoading(false);
         }
       }
     };
     
-    loadFavorites();
+    loadFavorite();
   }, [user]);
 
   const handleNewOrder = () => {
     navigate('/order');
   };
 
-  const handleReorderFave = () => {
+  const handleReorderFave = async () => {
     if (!user) {
       navigate('/login');
       return;
     }
-    
-    if (favorites.length === 0) {
-      navigate('/order');
-      return;
-    }
 
-    const lastFavorite = favorites[0];
-    navigate('/order', { 
-      state: { 
-        favoriteOrder: {
-          selectedPizza: lastFavorite.items[0].pizza._id,
-          size: lastFavorite.items[0].size,
-          crust: lastFavorite.items[0].crust,
-          quantity: lastFavorite.items[0].quantity,
-          extraToppings: lastFavorite.items[0].extraToppings,
-          deliveryMethod: lastFavorite.deliveryMethod,
-          paymentMethod: lastFavorite.paymentMethod,
-          deliveryAddress: lastFavorite.deliveryAddress
+    try {
+      setIsLoading(true);
+      // Get the favorite order details
+      const response = await axios.get('http://localhost:5000/api/orders/favorite', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
+      });
+
+      if (!response.data) {
+        navigate('/order');
+        return;
       }
-    });
+
+      const favoriteOrder = response.data;
+      
+      // Navigate to order page with favorite order details
+      navigate('/order', { 
+        state: { 
+          favoriteOrder: {
+            selectedPizza: favoriteOrder.items[0].pizza._id,
+            size: favoriteOrder.items[0].size,
+            crust: favoriteOrder.items[0].crust,
+            quantity: favoriteOrder.items[0].quantity,
+            extraToppings: favoriteOrder.items[0].extraToppings,
+            deliveryMethod: favoriteOrder.deliveryMethod,
+            paymentMethod: favoriteOrder.paymentMethod,
+            deliveryAddress: favoriteOrder.deliveryAddress,
+            price: favoriteOrder.items[0].price
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Failed to get favorite order:', err);
+      navigate('/order');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSurpriseMe = () => {
@@ -107,20 +125,50 @@ const Home = () => {
       return;
     }
 
+    // Random selections
     const randomPizza = pizzas[Math.floor(Math.random() * pizzas.length)];
     const sizes = ['Small', 'Medium', 'Large'];
     const crusts = ['Thin Crust', 'Thick Crust', 'Stuffed Crust'];
+    const deliveryMethods = ['CarryOut', 'Delivery'];
+    const paymentMethods = ['Cash', 'Card'];
+    const quantities = [1, 2, 3];
+    const allToppings = [
+      'Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 
+      'Bacon', 'Extra cheese', 'Green peppers', 'Black olives'
+    ];
+    
+    // Randomly select 0-4 toppings
+    const numToppings = Math.floor(Math.random() * 5);
+    const shuffledToppings = [...allToppings].sort(() => 0.5 - Math.random());
+    const selectedToppings = shuffledToppings.slice(0, numToppings);
+
+    // Calculate base price based on size
+    const selectedSize = sizes[Math.floor(Math.random() * sizes.length)];
+    let priceMultiplier = 1;
+    switch (selectedSize) {
+      case 'Small': priceMultiplier = 0.8; break;
+      case 'Medium': priceMultiplier = 0.9; break;
+      case 'Large': priceMultiplier = 1; break;
+    }
+
+    // Calculate price with toppings and crust
+    const selectedCrust = crusts[Math.floor(Math.random() * crusts.length)];
+    const basePrice = randomPizza.price * priceMultiplier;
+    const toppingsPrice = selectedToppings.length * 1.50;
+    const crustPrice = selectedCrust === 'Stuffed Crust' ? 2 : 0;
+    const totalPrice = basePrice + toppingsPrice + crustPrice;
     
     navigate('/order', {
       state: {
         surpriseOrder: {
           selectedPizza: randomPizza._id,
-          size: sizes[Math.floor(Math.random() * sizes.length)],
-          crust: crusts[Math.floor(Math.random() * crusts.length)],
-          quantity: 1,
-          extraToppings: [],
-          deliveryMethod: 'CarryOut',
-          paymentMethod: 'Cash'
+          size: selectedSize,
+          crust: selectedCrust,
+          quantity: quantities[Math.floor(Math.random() * quantities.length)],
+          extraToppings: selectedToppings,
+          deliveryMethod: deliveryMethods[Math.floor(Math.random() * deliveryMethods.length)],
+          paymentMethod: paymentMethods[Math.floor(Math.random() * paymentMethods.length)],
+          price: totalPrice
         }
       }
     });

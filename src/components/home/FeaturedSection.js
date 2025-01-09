@@ -19,12 +19,12 @@ const FeaturedPizza = React.memo(({ image, title, description }) => (
 const FeaturedSection = () => {
   const featuredPizzas = [
     {
-      image: '/images/pizza-img.png',
+      image: '/images/pepperoni.png',
       title: 'Classic Pepperoni',
       description: 'Our most popular pizza loaded with premium pepperoni'
     },
     {
-      image: '/images/pizza-img-2.png',
+      image: '/images/supreme.png',
       title: 'Supreme Special',
       description: 'Loaded with fresh vegetables and premium toppings'
     }
